@@ -6,12 +6,11 @@ import { PostsModule } from './posts/posts.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConfigService } from './config/postgres.config.service';
 import { ConfigModule } from '@nestjs/config';
+import { ImagesModule } from './images/images.module';
 import * as Joi from 'joi';
 
 @Module({
   imports: [
-    UsersModule,
-    PostsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
@@ -31,6 +30,9 @@ import * as Joi from 'joi';
       useClass: PostgresConfigService,
       inject: [PostgresConfigService],
     }),
+    ImagesModule,
+    UsersModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
