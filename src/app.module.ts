@@ -19,9 +19,9 @@ import * as Joi from 'joi';
         NODE_ENV: Joi.string()
           .valid('development', 'production', 'test', 'provision')
           .default('development'),
-        PORT: Joi.number().port().min(0).max(65535).default(3000),
+        PORT: Joi.number().integer().port().min(0).max(65535).default(3000),
         DB_HOST: Joi.string().default('localhost'),
-        DB_PORT: Joi.number().port().min(0).max(65535).default(5432),
+        DB_PORT: Joi.number().integer().port().min(0).max(65535).default(5432),
         DB_USER: Joi.string().default('postgres'),
         DB_PASS: Joi.string().default('root'),
         DB_NAME: Joi.string().default('planeta_conectado'),
