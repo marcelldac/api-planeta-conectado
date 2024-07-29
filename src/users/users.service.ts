@@ -27,19 +27,20 @@ export class UsersService {
     return await this.usersRepository.find();
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    return await this.usersRepository.findOneBy({ user_id: id });
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    const user = await this.usersRepository.findOneBy({ user_id: id });
+    const user = await this.findOne(id);
     if (!user) {
       throw new NotFoundException('User was not found', {
         description: `User with id ${id} was not found`,
       });
     }
 
-    Object.assign(user, updateUserDto as User);
+    //Same sintax as Object.assign(user, updateUserDto as User) but using generics.
+    Object.assign(user, <User>updateUserDto);
 
     await this.usersRepository.save(user);
   }
