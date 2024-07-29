@@ -1,9 +1,15 @@
 import { Post } from 'src/posts/entities/post.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  @Column('text', { primary: true })
   user_id: string;
 
   @Column('varchar', { length: 50 })
@@ -18,6 +24,9 @@ export class User {
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 
+  @CreateDateColumn()
   created_at: Date;
+
+  @UpdateDateColumn()
   updated_at: Date;
 }
