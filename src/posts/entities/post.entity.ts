@@ -6,13 +6,12 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'posts' })
 export class Post {
-  @PrimaryGeneratedColumn('uuid')
+  @Column({ primary: true })
   post_id: string;
 
   @Column('varchar', { length: 30 })
