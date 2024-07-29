@@ -39,7 +39,7 @@ export class UsersService {
       });
     }
 
-    Object.assign(user, updateUserDto);
+    Object.assign(user, updateUserDto as User);
 
     await this.usersRepository.save(user);
   }
