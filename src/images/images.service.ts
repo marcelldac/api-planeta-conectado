@@ -1,26 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateImageDto } from './dto/create-image.dto';
 import { UpdateImageDto } from './dto/update-image.dto';
+import { Image } from './entities/image.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ImagesService {
-  create(createImageDto: CreateImageDto) {
-    return 'This action adds a new image';
+  constructor(
+    @InjectRepository(Image)
+    private imagesRepository: Repository<Image>,
+  ) {}
+
+  async create(createImageDto: CreateImageDto) {
+    const image = this.imagesRepository.create(createImageDto);
+
+    await this.imagesRepository.save(image);
+
+    return image;
   }
 
-  findAll() {
-    return `This action returns all images`;
+  async findAll() {
+    return await this.imagesRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} image`;
+  async findOne(id: number) {
+    return await this.imagesRepository.findOneBy({ image_id: id });
   }
 
-  update(id: number, updateImageDto: UpdateImageDto) {
-    return `This action updates a #${id} image`;
+  async update(id: number, updateImageDto: UpdateImageDto) {
+    const image = await this.findOne(id);
+    if (!image) {
+      throw new NotFoundException('Image was not found', {
+        description: `User with id ${id} was not found`,
+      });
+    }
+
+    //Same sintax as Object.assign(user, updateUserDto as User) but using generics.
+    Object.assign(image, <Image>updateImageDto);
+
+    await this.imagesRepository.save(image);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} image`;
+  async remove(id: number) {
+    await this.imagesRepository.delete({ image_id: id });
   }
 }
