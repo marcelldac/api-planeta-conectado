@@ -1,6 +1,7 @@
 import { Image } from 'src/images/entities/image.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -8,6 +9,7 @@ import {
   OneToMany,
   UpdateDateColumn,
 } from 'typeorm';
+import { ulid } from 'ulid';
 
 @Entity({ name: 'posts' })
 export class Post {
@@ -37,4 +39,9 @@ export class Post {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @BeforeInsert()
+  generateId() {
+    this.post_id = ulid();
+  }
 }

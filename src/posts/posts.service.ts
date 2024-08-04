@@ -4,7 +4,6 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
-import { ulid } from 'ulid';
 
 @Injectable()
 export class PostsService {
@@ -14,8 +13,6 @@ export class PostsService {
   ) {}
   async create(createPostDto: CreatePostDto) {
     const post = this.postsRepository.create(createPostDto);
-
-    post.post_id = ulid();
 
     await this.postsRepository.save(post);
 
