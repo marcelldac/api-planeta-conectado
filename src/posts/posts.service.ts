@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -22,16 +22,26 @@ export class PostsService {
     return post;
   }
 
-  findAll() {
-    return `This action returns all posts`;
+  async findAll() {
+    return await this.postsRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findOne(id: string) {
+    return await this.postsRepository.findOneBy({ post_id: id });
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  async update(id: string, updatePostDto: UpdatePostDto) {
+    const post = await this.findOne(id);
+    if (!post) {
+      throw new NotFoundException('Post was not found', {
+        description: `Post with id ${id} was not found`,
+      });
+    }
+
+    //Same sintax as Object.assign(post, updatePostDto as Post) but using generics.
+    Object.assign(post, <Post>updatePostDto);
+
+    await this.postsRepository.save(post);
   }
 
   remove(id: number) {
