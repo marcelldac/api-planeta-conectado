@@ -8,6 +8,7 @@ import { PostgresConfigService } from './config/postgres.config.service';
 import { ConfigModule } from '@nestjs/config';
 import { ImagesModule } from './images/images.module';
 import * as Joi from 'joi';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import * as Joi from 'joi';
       useClass: PostgresConfigService,
       inject: [PostgresConfigService],
     }),
+    CacheModule.register({ isGlobal: true, ttl: 60 * 60 * 1000 }), // 1 hour ttl
     ImagesModule,
     UsersModule,
     PostsModule,
