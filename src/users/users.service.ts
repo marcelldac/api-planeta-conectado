@@ -45,7 +45,7 @@ export class UsersService {
     await this.usersRepository.save(user);
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    await this.usersRepository.delete({ user_id: id });
   }
 }
